@@ -2,15 +2,22 @@
 
 const request = require('request')
 
-const debug = (...args) => (process.env.DEBUG) ? console.log.apply(null, args) : null
-const error = (...args) => (process.env.ERROR) ? console.error.apply(null, args) : null
+/**
+ * DEBUG (optional) - allows debug information logging
+ * ERROR (optional) - allows error information logging
+ * SLACK_URL        - AWS SNS topic name to send Slack message processing information
+ */
+const {DEBUG, ERROR, SLACK_URL} = process.env
+
+const debug = (...args) => (DEBUG) ? console.log.apply(null, args) : null
+const error = (...args) => (ERROR) ? console.error.apply(null, args) : null
 
 const getMessage = (data) => {
   const messageExists = data && data.Records && data.Records[0] && data.Records[0].Sns && data.Records[0].Sns.Message
   return (messageExists) ? data.Records[0].Sns.Message : null
 }
 
-exports.main = (data, cb) => {
+exports.main = (data, aws, cb) => {
   debug(`Records from SNS: ${JSON.stringify(data, null, 2)}`)
 
   const message = getMessage(data)
@@ -22,7 +29,7 @@ exports.main = (data, cb) => {
     return
   }
 
-  const notification
+  let notification = null
   try {
     notification = JSON.parse(message)
   } catch (e) {
@@ -42,5 +49,6 @@ exports._sendNotificationToSlack = (notification, cb) => {
   message += (err) ? err : `File URI: ${file}, metadata: ${meta}`
 
   debug(`Sending message to Slack: ${message}`)
-  request.post(SLACK_URL, cb)
+  // request.post(SLACK_URL, cb)
+  cb()
 }
