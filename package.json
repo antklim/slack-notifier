@@ -8,9 +8,7 @@
     "test": "NODE_ENV=test mocha ./*_test.js",
     "zip": "zip -r build/slack-notifier.zip node_modules/ *.js *.json"
   },
-  "dependencies": {
-    "request": "^2.81.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "clone-deep": "^0.3.0",
     "mocha": "^3.4.2",
