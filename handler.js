@@ -54,5 +54,11 @@ exports._sendNotificationToSlack = (notification, cb) => {
 
   debug(`Sending message to Slack: ${text}`)
 
-  request.get(`${SLACK_URL}?${query}`, cb)
+  request.get(`${SLACK_URL}?${query}`, (res) => {
+    debug(res)
+    cb()
+  }).on('error', (err) => {
+    error(err)
+    cb()
+  })
 }
