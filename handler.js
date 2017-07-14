@@ -54,6 +54,7 @@ exports._sendNotificationToSlack = (notification, cb) => {
 
   debug(`Sending message to Slack: ${text}`)
 
+  // TODO: call cb as early as it possible
   request.get(`${SLACK_URL}?${query}`, (res) => {
     debug(res)
     cb()
